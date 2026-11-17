@@ -15,7 +15,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     container_name: mi-app-todobarato
     restart: on-failure
     depends_on:

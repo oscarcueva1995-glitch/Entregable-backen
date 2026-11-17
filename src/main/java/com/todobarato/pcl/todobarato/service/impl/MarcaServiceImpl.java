@@ -8,8 +8,8 @@ import com.todobarato.pcl.todobarato.repository.MarcaRepository;
 import com.todobarato.pcl.todobarato.service.MarcaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MarcaServiceImpl implements MarcaService {
@@ -19,24 +19,24 @@ public class MarcaServiceImpl implements MarcaService {
     @Override
     public MarcaResponseDTO crear(MarcaRequestDTO request) {
         String nombreTrim = request.getNombre().trim();
-        if(marcaRepository.findByNombre(nombreTrim).isPresent()){
+        if (marcaRepository.findByNombre(nombreTrim).isPresent()) {
             throw new IllegalArgumentException("Ya Existe un nombre de la marca : " + nombreTrim);
         }
+
         Marca marca = Marca.builder()
                 .nombre(nombreTrim)
                 .estado(request.getEstado() != null ? request.getEstado() : true)
                 .precio(request.getPrecio())
                 .cantidad(request.getCantidad())
+                .total(request.getPrecio() * request.getCantidad()) // Cálculo automático
                 .build();
+
         return mapToResponseDTO(marcaRepository.save(marca));
     }
 
     @Override
     public List<MarcaResponseDTO> listarTodos() {
-        return marcaRepository.findAll()
-                .stream()
-                .map(this::mapToResponseDTO)
-                .toList();
+        return marcaRepository.findAll().stream().map(this::mapToResponseDTO).toList();
     }
 
     @Override
@@ -49,24 +49,21 @@ public class MarcaServiceImpl implements MarcaService {
     public MarcaResponseDTO actualizar(Integer idmarca, MarcaRequestDTO request) {
         Marca marca = buscarEntidadPorId(idmarca);
         String nombreTrim = request.getNombre().trim();
+
         marcaRepository.findByNombre(nombreTrim)
                 .filter(otra -> !otra.getIdmarca().equals(idmarca))
                 .ifPresent(otra -> {
                     throw new IllegalArgumentException("Ya existe marca con el nombre: " + nombreTrim);
                 });
+
         marca.setNombre(nombreTrim);
         marca.setEstado(request.getEstado() != null ? request.getEstado() : true);
         marca.setPrecio(request.getPrecio());
         marca.setCantidad(request.getCantidad());
+        marca.setTotal(request.getPrecio() * request.getCantidad());
+
         marcaRepository.save(marca);
         return mapToResponseDTO(marca);
-    }
-
-    private Marca buscarEntidadPorId(Integer idmarca){
-        return marcaRepository.findById(idmarca)
-                .orElseThrow(() -> {
-                    return new ResourceNotFoundException("No existe una marca con id: " + idmarca);
-                });
     }
 
     @Override
@@ -75,17 +72,21 @@ public class MarcaServiceImpl implements MarcaService {
         marcaRepository.delete(marca);
     }
 
-    private MarcaResponseDTO mapToResponseDTO(Marca marca){
+    private Marca buscarEntidadPorId(Integer idmarca) {
+        return marcaRepository.findById(idmarca)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe una marca con id: " + idmarca));
+    }
+
+    private MarcaResponseDTO mapToResponseDTO(Marca marca) {
         return MarcaResponseDTO.builder()
                 .idmarca(marca.getIdmarca())
                 .nombre(marca.getNombre())
                 .estado(marca.getEstado())
                 .precio(marca.getPrecio())
                 .cantidad(marca.getCantidad())
-                .total(marca.getPrecio().multiply(java.math.BigDecimal.valueOf(marca.getCantidad())))
+                .total(marca.getTotal())
                 .created_at(marca.getCreated_at())
                 .updated_at(marca.getUpdated_at())
                 .build();
     }
-
 }

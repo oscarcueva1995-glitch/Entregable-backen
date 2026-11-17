@@ -12,8 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "marcas")
 @Getter
@@ -21,20 +19,27 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Marca extends Auditable{
+public class Marca extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idmarca")
     private Integer idmarca;
-    @Column(name = "nombre",nullable = false,unique = true,length = 200)
+
+    @Column(name = "nombre", nullable = false, unique = true, length = 200)
     private String nombre;
-    @Column(name = "estado",nullable = false)
+
+    @Column(name = "estado", nullable = false)
     @Builder.Default
     private Boolean estado = true;
-    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
-    private BigDecimal precio;
+
+    // NUEVOS CAMPOS AGREGADOS
+    @Column(name = "precio", nullable = false)
+    private Double precio;
+
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
 
+    @Column(name = "total", nullable = false)
+    private Double total;
 }

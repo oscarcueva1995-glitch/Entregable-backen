@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "marcas")
 @Getter
@@ -30,5 +32,9 @@ public class Marca extends Auditable{
     @Column(name = "estado",nullable = false)
     @Builder.Default
     private Boolean estado = true;
+    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
+    private BigDecimal precio;
+    @Column(name = "cantidad", nullable = false)
+    private Integer cantidad;
 
 }

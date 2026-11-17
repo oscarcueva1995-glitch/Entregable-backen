@@ -25,6 +25,8 @@ public class MarcaServiceImpl implements MarcaService {
         Marca marca = Marca.builder()
                 .nombre(nombreTrim)
                 .estado(request.getEstado() != null ? request.getEstado() : true)
+                .precio(request.getPrecio())
+                .cantidad(request.getCantidad())
                 .build();
         return mapToResponseDTO(marcaRepository.save(marca));
     }
@@ -54,6 +56,8 @@ public class MarcaServiceImpl implements MarcaService {
                 });
         marca.setNombre(nombreTrim);
         marca.setEstado(request.getEstado() != null ? request.getEstado() : true);
+        marca.setPrecio(request.getPrecio());
+        marca.setCantidad(request.getCantidad());
         marcaRepository.save(marca);
         return mapToResponseDTO(marca);
     }
@@ -76,6 +80,9 @@ public class MarcaServiceImpl implements MarcaService {
                 .idmarca(marca.getIdmarca())
                 .nombre(marca.getNombre())
                 .estado(marca.getEstado())
+                .precio(marca.getPrecio())
+                .cantidad(marca.getCantidad())
+                .total(marca.getPrecio().multiply(java.math.BigDecimal.valueOf(marca.getCantidad())))
                 .created_at(marca.getCreated_at())
                 .updated_at(marca.getUpdated_at())
                 .build();

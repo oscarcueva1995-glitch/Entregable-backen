@@ -27,6 +27,8 @@ CREATE TABLE `marcas` (
   `idmarca` int(11) NOT NULL,
   `nombre` varchar(200) NOT NULL,
   `estado` tinyint(1) NOT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `cantidad` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -35,8 +37,8 @@ CREATE TABLE `marcas` (
 -- Volcado de datos para la tabla `marcas`
 --
 
-INSERT INTO `marcas` (`idmarca`, `nombre`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 'Toyota', 1, '2026-10-27 03:31:46', '2026-10-27 03:31:46');
+INSERT INTO `marcas` (`idmarca`, `nombre`, `estado`, `precio`, `cantidad`, `created_at`, `updated_at`) VALUES
+(1, 'Toyota', 1, 0.00, 0, '2026-10-27 03:31:46', '2026-10-27 03:31:46');
 
 -- --------------------------------------------------------
 
